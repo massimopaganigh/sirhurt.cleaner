@@ -3,17 +3,16 @@
 namespace SirHurt.Cleaner
 {
     /// <summary>
-    /// Main entry point class for the cleanup utility application.
-    /// This program removes specific folders and registry keys related to Roblox and SirHurt.
+    /// Entry point for the SirHurt cleanup utility.
+    /// Removes Roblox and SirHurt-related folders and registry keys.
     /// </summary>
     public class Program
     {
         /// <summary>
-        /// The main entry point for the application. Displays a banner, initializes the cleaner,
-        /// and executes the cleanup operations asynchronously.
+        /// Main application entry point. Initializes logging, displays a banner,
+        /// and executes the system cleanup process.
         /// </summary>
-        /// <param name="args">Command line arguments (not used in this application)</param>
-        /// <returns>A task representing the asynchronous operation</returns>
+        /// <returns>Asynchronous task</returns>
         static async Task Main()
         {
             Log.Logger = new LoggerConfiguration().MinimumLevel.Information().WriteTo.Console().CreateLogger();

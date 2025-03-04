@@ -5,18 +5,15 @@ using System.Diagnostics;
 namespace SirHurt.Cleaner
 {
     /// <summary>
-    /// Provides functionality to clean up system resources by removing specific folders
-    /// and registry keys. This class handles the deletion of Roblox and SirHurt related
-    /// components from the file system and Windows registry for all users.
+    /// Removes SirHurt and Roblox-related components from the filesystem and Windows registry.
+    /// Handles cleanup operations for all user profiles on the system.
     /// </summary>
     public static class SystemCleaner
     {
         /// <summary>
-        /// Executes the cleanup operation asynchronously.
-        /// This method wraps all cleanup operations in a try-catch block
-        /// and reports progress using Serilog.
+        /// Executes all cleanup operations asynchronously with proper error handling.
         /// </summary>
-        /// <returns>A task that represents the asynchronous operation</returns>
+        /// <returns>Task representing the cleanup operation</returns>
         public static async Task RunCleanupAsync()
         {
             try
@@ -38,7 +35,7 @@ namespace SirHurt.Cleaner
         }
 
         /// <summary>
-        /// Cleans up system-wide folders that require administrative privileges.
+        /// Removes system-wide folders that require administrative privileges.
         /// </summary>
         private static void CleanupSystemFolders()
         {
@@ -58,7 +55,7 @@ namespace SirHurt.Cleaner
         }
 
         /// <summary>
-        /// Performs folder cleanup operations for the current user.
+        /// Removes application folders for the current user.
         /// </summary>
         private static void CleanupCurrentUserFolders()
         {
@@ -77,7 +74,7 @@ namespace SirHurt.Cleaner
         }
 
         /// <summary>
-        /// Finds and cleans all user profiles on the system.
+        /// Removes application folders from all user profiles on the system.
         /// </summary>
         private static void CleanupAllUserProfiles()
         {
@@ -141,8 +138,7 @@ namespace SirHurt.Cleaner
         }
 
         /// <summary>
-        /// Performs the registry cleanup operations by removing specified
-        /// registry keys for all users.
+        /// Removes application registry keys for all users.
         /// </summary>
         private static void CleanupRegistry()
         {
@@ -189,11 +185,9 @@ namespace SirHurt.Cleaner
         }
 
         /// <summary>
-        /// Deletes a specified folder and all its contents if it exists.
-        /// The method provides logging output for the deletion process
-        /// and handles any exceptions that may occur.
+        /// Deletes a folder and all its contents with error handling.
         /// </summary>
-        /// <param name="path">The full path to the folder to be deleted</param>
+        /// <param name="path">Full path to the folder</param>
         private static void DeleteFolder(string path)
         {
             if (!Directory.Exists(path))
@@ -222,9 +216,9 @@ namespace SirHurt.Cleaner
         }
 
         /// <summary>
-        /// Attempts to delete a folder with elevated permissions by using a PowerShell command.
+        /// Attempts to delete a folder using PowerShell with elevated permissions.
         /// </summary>
-        /// <param name="path">The path to the folder to delete</param>
+        /// <param name="path">Path to the folder</param>
         private static void TryDeleteWithElevatedPermissions(string path)
         {
             try
@@ -277,19 +271,19 @@ namespace SirHurt.Cleaner
         }
 
         /// <summary>
-        /// Deletes a specified registry key from the HKEY_CURRENT_USER hive if it exists.
+        /// Deletes a registry key from HKEY_CURRENT_USER.
         /// </summary>
-        /// <param name="keyPath">The registry key path to be deleted</param>
+        /// <param name="keyPath">Registry key path to delete</param>
         private static void DeleteRegistryKey(string keyPath)
         {
             DeleteRegistryKey(keyPath, Registry.CurrentUser);
         }
 
         /// <summary>
-        /// Deletes a specified registry key from the specified registry hive if it exists.
+        /// Deletes a registry key from the specified registry hive.
         /// </summary>
-        /// <param name="keyPath">The registry key path to be deleted</param>
-        /// <param name="registryHive">The registry hive to use</param>
+        /// <param name="keyPath">Registry key path to delete</param>
+        /// <param name="registryHive">Registry hive containing the key</param>
         private static void DeleteRegistryKey(string keyPath, RegistryKey registryHive)
         {
             try
