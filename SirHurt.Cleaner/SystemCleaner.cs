@@ -5,6 +5,7 @@ namespace SirHurt.Cleaner
     /// <summary>
     /// Removes SirHurt and Roblox-related components from the filesystem and Windows registry.
     /// Handles cleanup operations for the current user and other user profiles on the system.
+    /// Also cleans temporary folders for the system and all users.
     /// </summary>
     public static class SystemCleaner
     {
@@ -27,6 +28,7 @@ namespace SirHurt.Cleaner
                 // Create component cleaners
                 var cleanerCore = new CleanerCore(logger, fileSystem, userInteraction, processManager, config);
                 var registryCleaner = new RegistryCleaner(logger, registry, config);
+                var tempCleaner = new TempFolderCleaner(logger, fileSystem, cleanerCore);
 
                 await Task.Run(() =>
                 {
@@ -58,6 +60,13 @@ namespace SirHurt.Cleaner
                     // Clean registry
                     registryCleaner.CleanCurrentUserRegistry();
                     registryCleaner.CleanAllUsersRegistry();
+
+                    // Clean temporary folders
+                    logger.Information("Starting temporary folder cleanup");
+                    tempCleaner.CleanCurrentUserTempFolders();
+                    tempCleaner.CleanAllUsersTempFolders();
+                    tempCleaner.CleanSystemTempFolders();
+
                 }).ConfigureAwait(false);
 
                 logger.Information("Operations completed successfully.");
