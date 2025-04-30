@@ -33,7 +33,17 @@ namespace SirHurt.Cleaner
 
                 Log.Information("Starting cleanup program...");
 
-                await SystemCleaner.RunCleanupAsync().ConfigureAwait(false);
+                // Ask the user if they want to clean temp folders
+                var config = new CleanerConfig();
+                Console.Write("Would you like to clean temporary folders? (Y/N, default: Y): ");
+                var response = Console.ReadLine();
+                
+                config.CleanTempFolders = response == null || 
+                                         response.Trim().Equals("", StringComparison.OrdinalIgnoreCase) || 
+                                         response.Trim().Equals("y", StringComparison.OrdinalIgnoreCase) ||
+                                         response.Trim().Equals("yes", StringComparison.OrdinalIgnoreCase);
+
+                await SystemCleaner.RunCleanupAsync(config).ConfigureAwait(false);
 
                 Log.Information("Press any key to exit...");
                 Console.ReadKey();

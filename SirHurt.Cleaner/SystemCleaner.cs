@@ -12,8 +12,9 @@ namespace SirHurt.Cleaner
         /// <summary>
         /// Executes all cleanup operations asynchronously with proper error handling.
         /// </summary>
+        /// <param name="config">Optional configuration settings. If null, default settings will be used.</param>
         /// <returns>Task representing the cleanup operation</returns>
-        public static async Task RunCleanupAsync()
+        public static async Task RunCleanupAsync(CleanerConfig? config = null)
         {
             try
             {
@@ -23,7 +24,9 @@ namespace SirHurt.Cleaner
                 var registry = new StandardRegistry();
                 var userInteraction = new ConsoleUserInteraction();
                 var processManager = new StandardProcessManager(logger);
-                var config = new CleanerConfig();
+                
+                // Use provided config or create a new one
+                config ??= new CleanerConfig();
 
                 // Create component cleaners
                 var cleanerCore = new CleanerCore(logger, fileSystem, userInteraction, processManager, config);
@@ -61,11 +64,18 @@ namespace SirHurt.Cleaner
                     registryCleaner.CleanCurrentUserRegistry();
                     registryCleaner.CleanAllUsersRegistry();
 
-                    // Clean temporary folders
-                    logger.Information("Starting temporary folder cleanup");
-                    tempCleaner.CleanCurrentUserTempFolders();
-                    tempCleaner.CleanAllUsersTempFolders();
-                    tempCleaner.CleanSystemTempFolders();
+                    // Clean temporary folders if enabled
+                    if (config.CleanTempFolders)
+                    {
+                        logger.Information("Starting temporary folder cleanup");
+                        tempCleaner.CleanCurrentUserTempFolders();
+                        tempCleaner.CleanAllUsersTempFolders();
+                        tempCleaner.CleanSystemTempFolders();
+                    }
+                    else
+                    {
+                        logger.Information("Temporary folder cleanup is disabled");
+                    }
 
                 }).ConfigureAwait(false);
 

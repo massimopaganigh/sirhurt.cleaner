@@ -28,6 +28,11 @@ namespace SirHurt.Cleaner
         /// </summary>
         public IReadOnlyList<string> ProcessesToClose { get; }
 
+        /// <summary>
+        /// Whether to clean temporary folders
+        /// </summary>
+        public bool CleanTempFolders { get; set; } = true;
+
         public CleanerConfig()
         {
             FilesRequiringConfirmation = new List<string>
